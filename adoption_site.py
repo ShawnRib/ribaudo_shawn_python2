@@ -34,12 +34,13 @@ class Puppy(db.Model):
     def __init__(self,name, color_fur):
         self.name = name
         self.color_fur = color_fur
+        self.id = id
 
     def __repr__(self):
         if self.owner:
-            return f"Puppy name: {self.name}, Fur color: {self.color_fur}, Owner: {self.owner.name}"
+            return f"ID: {self.id}, Puppy name: {self.name}, Fur color: {self.color_fur}, Owner: {self.owner.name}"
         else:
-            return f"Puppy name: {self.name}, Fur color: {self.color_fur}, Owner: none"
+            return f"ID: {self.id},Puppy name: {self.name}, Fur color: {self.color_fur}, Owner: none"
 
 class Owner(db.Model):
 
