@@ -14,7 +14,7 @@ my_cursor. execute("CREATE DATABASE puppies;")
 #my_cursor. execute("USE puppies;") ????????????????
 
 my_cursor. execute("CREATE TABLE `puppies`.`puppies` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(45) NULL,`color_fur` VARCHAR(45) NULL, `owner` INT NULL,PRIMARY KEY (`id`));")
-my_cursor. execute("CREATE TABLE `puppies`.`owners` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(45) NULL,`puppy_id` INT NULL,PRIMARY KEY (`id`));")
+my_cursor. execute("CREATE TABLE `puppies`.`owners` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(45) NULL, `puppy_id` INT NULL,PRIMARY KEY (`id`));")
 
 '''
 CREATE TABLE `puppies`.`puppies` (

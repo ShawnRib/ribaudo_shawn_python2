@@ -3,6 +3,11 @@ from forms import  AddForm , DelForm, AddOwnerForm
 from flask import Flask, render_template, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
+import pandas as pd
+import sqlalchemy as sq
+
+
 app = Flask(__name__)
 # Key for Forms
 app.config['SECRET_KEY'] = 'mysecretkey'
@@ -34,13 +39,13 @@ class Puppy(db.Model):
     def __init__(self,name, color_fur):
         self.name = name
         self.color_fur = color_fur
-        self.id = id
+
 
     def __repr__(self):
         if self.owner:
-            return f"ID: {self.id}, Puppy name: {self.name}, Fur color: {self.color_fur}, Owner: {self.owner.name}"
+            return f"Puppy name: {self.name}, Fur color: {self.color_fur}, Owner: {self.owner.name}"
         else:
-            return f"ID: {self.id},Puppy name: {self.name}, Fur color: {self.color_fur}, Owner: none"
+            return f"Puppy name: {self.name}, Fur color: {self.color_fur}, Owner: none"
 
 class Owner(db.Model):
 
@@ -100,9 +105,29 @@ def add_owner():
 
 @app.route('/list')
 def list_pup():
+    con = sq.create_engine('mysql+pymysql://root:SQL5Data@localhost/puppies')
+    df_owner = pd.read_sql('owners', con)
+    print(df_owner)
+
+    # read only
+    df_puppies = pd.read_sql('puppies', con)
+    print(df_puppies)
+
+    df_fur_group = df_puppies.groupby('color_fur')
+    print('---Group by color---')
+    print(df_fur_group.size())
+    total_row_puppies = df_puppies.shape[0]
+    total_row_owner = df_owner.shape[0]
+    print('Total count for puppies table: ' + str(total_row_puppies))
+    print('Total count for owners table: ' + str(total_row_owner))
+    print('Total number of column in puppies table: ' + str(df_puppies.shape[1]))
+    print('Total number of column in owners table: ' + str(df_owner.shape[1]))
+
+
+
     # Grab a list of puppies from database.
     puppies = Puppy.query.all()
-    return render_template('list.html', puppies=puppies)
+    return render_template('list.html', puppies=puppies, total_row_puppies=total_row_puppies, total_row_owner=total_row_owner, puppies_column=df_puppies.shape[1], owner_column=df_owner.shape[1], group_by_fur=df_fur_group.size())
 
 @app.route('/delete', methods=['GET', 'POST'])
 def del_pup():
